@@ -52,7 +52,7 @@ export default function Gallery({ onSelectImage, completedImages }) {
         <div style={styles.dailyPreview}>
           <svg viewBox={dailyImage.viewBox} style={styles.dailySvg}>
             {dailyImage.regions.slice(0, 20).map(r => (
-              <path key={r.id} d={r.d} fill="#2a2a4a" stroke="#3a3a5c" strokeWidth="0.8" />
+              <path key={r.id} d={r.d} fill="#f5f5f5" stroke="#ddd" strokeWidth="0.8" />
             ))}
           </svg>
         </div>
@@ -88,7 +88,7 @@ export default function Gallery({ onSelectImage, completedImages }) {
                     const saved = completedImages[img.id];
                     const filled = saved && saved !== 'done' ? saved[r.id] : (isDone ? r.colorId : null);
                     const color = filled ? COLOR_PALETTE.find(c => c.id === filled)?.hex : null;
-                    return <path key={r.id} d={r.d} fill={color || '#2a2a4a'} stroke="#3a3a5c" strokeWidth="0.5" />;
+                    return <path key={r.id} d={r.d} fill={color || '#f5f5f5'} stroke="#ddd" strokeWidth="0.5" />;
                   })}
                 </svg>
                 {isDone && <div style={styles.doneOverlay}><span style={styles.doneStar}>★</span></div>}
@@ -126,9 +126,9 @@ export default function Gallery({ onSelectImage, completedImages }) {
 function Stat({ icon, label, value }) {
   return (
     <div style={{ textAlign: 'center' }}>
-      <div style={{ fontSize: 20, color: '#D4AC0D' }}>{icon}</div>
-      <div style={{ fontSize: 18, fontWeight: 700, color: '#f0ece3', fontFamily: 'Playfair Display, serif' }}>{value}</div>
-      <div style={{ fontSize: 10, color: '#7a7a9a', letterSpacing: 1, textTransform: 'uppercase' }}>{label}</div>
+      <div style={{ fontSize: 20, color: '#c0842a' }}>{icon}</div>
+      <div style={{ fontSize: 18, fontWeight: 700, color: '#1a1a2e', fontFamily: 'Playfair Display, serif' }}>{value}</div>
+      <div style={{ fontSize: 10, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase' }}>{label}</div>
     </div>
   );
 }
@@ -136,13 +136,14 @@ function Stat({ icon, label, value }) {
 const styles = {
   container: {
     minHeight: '100vh',
-    background: '#12122a',
+    background: '#ffffff',
     paddingBottom: 40,
     overflowX: 'hidden',
   },
   header: {
-    background: 'linear-gradient(135deg, #1a1a3e 0%, #12122a 100%)',
-    borderBottom: '1px solid #2a2a4a',
+    background: '#ffffff',
+    borderBottom: '2px solid #f0f0f0',
+    boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
   },
   headerInner: {
     maxWidth: 700,
@@ -161,20 +162,20 @@ const styles = {
   },
   logoIcon: {
     fontSize: 44,
-    color: '#D4AC0D',
+    color: '#c0842a',
     lineHeight: 1,
   },
   appName: {
     fontFamily: 'Playfair Display, serif',
     fontSize: 32,
     fontWeight: 900,
-    color: '#f0ece3',
+    color: '#1a1a2e',
     letterSpacing: -1,
     margin: 0,
   },
   tagline: {
     fontSize: 11,
-    color: '#7a7a9a',
+    color: '#aaa',
     letterSpacing: 2,
     textTransform: 'uppercase',
     margin: '3px 0 0',
@@ -190,10 +191,10 @@ const styles = {
     cursor: 'pointer',
   },
   dailyBannerInner: {
-    background: 'linear-gradient(135deg, #1a1a3e, #2a1a4e)',
+    background: '#fffbf2',
     borderRadius: 20,
     padding: '24px',
-    border: '1px solid #3a3a6a',
+    border: '1px solid #e8d8b0',
     display: 'flex',
     gap: 20,
     alignItems: 'center',
@@ -203,19 +204,20 @@ const styles = {
   },
   dailyLeft: {
     flex: 1,
-    background: 'linear-gradient(135deg, #1a1a3e, #2a1a4e)',
+    background: '#fffbf2',
     borderRadius: 20,
     padding: '24px',
-    border: '1px solid #3a3a6a',
+    border: '1px solid #e8d8b0',
     display: 'flex',
     flexDirection: 'column',
     gap: 8,
     transition: 'transform 0.2s',
+    boxShadow: '0 4px 20px rgba(180,130,40,0.1)',
   },
   dailyBadge: {
     fontSize: 10,
     letterSpacing: 3,
-    color: '#D4AC0D',
+    color: '#c0842a',
     textTransform: 'uppercase',
     fontWeight: 700,
   },
@@ -223,21 +225,21 @@ const styles = {
     fontFamily: 'Playfair Display, serif',
     fontSize: 26,
     fontWeight: 700,
-    color: '#f0ece3',
+    color: '#1a1a2e',
     margin: 0,
     lineHeight: 1.2,
   },
   dailyMeta: {
     fontSize: 12,
-    color: '#7a7a9a',
+    color: '#888',
     margin: 0,
   },
   dailyBtn: {
     display: 'inline-block',
     marginTop: 8,
     padding: '10px 20px',
-    background: '#D4AC0D',
-    color: '#12122a',
+    background: '#c0842a',
+    color: '#ffffff',
     border: 'none',
     borderRadius: 10,
     fontWeight: 700,
@@ -271,9 +273,9 @@ const styles = {
   catChip: {
     flexShrink: 0,
     padding: '7px 16px',
-    background: '#1e1e3e',
-    color: '#9a9aba',
-    border: '1px solid #2a2a4a',
+    background: '#f5f5f5',
+    color: '#666',
+    border: '1px solid #e0e0e0',
     borderRadius: 20,
     fontSize: 13,
     cursor: 'pointer',
@@ -282,9 +284,9 @@ const styles = {
     whiteSpace: 'nowrap',
   },
   catChipActive: {
-    background: '#D4AC0D',
-    color: '#12122a',
-    border: '1px solid #D4AC0D',
+    background: '#c0842a',
+    color: '#ffffff',
+    border: '1px solid #c0842a',
     fontWeight: 700,
   },
   grid: {
@@ -296,17 +298,18 @@ const styles = {
     gap: 16,
   },
   card: {
-    background: '#1a1a3e',
+    background: '#ffffff',
     borderRadius: 16,
     overflow: 'hidden',
-    border: '1px solid #2a2a4a',
+    border: '1px solid #eeeeee',
     cursor: 'pointer',
     transition: 'transform 0.2s, box-shadow 0.2s',
     animation: 'fadeUp 0.4s ease both',
+    boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
   },
   cardSvgWrap: {
     aspectRatio: '1',
-    background: '#12122a',
+    background: '#fafafa',
     position: 'relative',
     overflow: 'hidden',
   },
@@ -318,14 +321,14 @@ const styles = {
   doneOverlay: {
     position: 'absolute',
     inset: 0,
-    background: 'rgba(212, 172, 13, 0.15)',
+    background: 'rgba(192,132,42,0.1)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
   doneStar: {
     fontSize: 36,
-    color: '#D4AC0D',
+    color: '#c0842a',
   },
   cardBody: {
     padding: '12px 14px 14px',
@@ -340,7 +343,7 @@ const styles = {
     fontFamily: 'Playfair Display, serif',
     fontSize: 15,
     fontWeight: 600,
-    color: '#f0ece3',
+    color: '#1a1a2e',
   },
   diffBadge: {
     fontSize: 10,
@@ -350,7 +353,7 @@ const styles = {
   },
   cardCategory: {
     fontSize: 11,
-    color: '#5a5a7a',
+    color: '#aaa',
     margin: 0,
   },
   progressWrap: {
@@ -362,19 +365,19 @@ const styles = {
   progressBg: {
     flex: 1,
     height: 3,
-    background: '#2a2a4a',
+    background: '#eee',
     borderRadius: 2,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    background: 'linear-gradient(90deg, #D4AC0D, #F39C12)',
+    background: 'linear-gradient(90deg, #c0842a, #e8a030)',
     borderRadius: 2,
     transition: 'width 0.5s ease',
   },
   progressLabel: {
     fontSize: 10,
-    color: '#D4AC0D',
+    color: '#c0842a',
     fontWeight: 700,
     minWidth: 28,
   },
@@ -384,7 +387,7 @@ const styles = {
   },
   footerText: {
     fontSize: 12,
-    color: '#3a3a5a',
+    color: '#ccc',
     letterSpacing: 1,
   },
 };

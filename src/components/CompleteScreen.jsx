@@ -121,10 +121,10 @@ export default function CompleteScreen({ image, filledRegions, onBackToGallery, 
 function StatBox({ label, value }) {
   return (
     <div style={{ textAlign: 'center', flex: 1 }}>
-      <div style={{ fontFamily: 'Playfair Display, serif', fontSize: 22, fontWeight: 700, color: '#D4AC0D' }}>
+      <div style={{ fontFamily: 'Playfair Display, serif', fontSize: 22, fontWeight: 700, color: '#c0842a' }}>
         {value}
       </div>
-      <div style={{ fontSize: 10, color: '#5a5a7a', letterSpacing: 1, textTransform: 'uppercase', marginTop: 2 }}>
+      <div style={{ fontSize: 10, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', marginTop: 2 }}>
         {label}
       </div>
     </div>
@@ -134,7 +134,7 @@ function StatBox({ label, value }) {
 const styles = {
   screen: {
     minHeight: '100vh',
-    background: 'radial-gradient(ellipse at center, #1a1a4e 0%, #0a0a1e 100%)',
+    background: '#ffffff',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -152,7 +152,7 @@ const styles = {
     width: 4,
     height: 4,
     borderRadius: '50%',
-    background: '#D4AC0D',
+    background: '#c0842a',
     animation: 'particleFloat 3s ease-in-out infinite',
     opacity: 0.6,
   },
@@ -168,7 +168,7 @@ const styles = {
   badge: {
     fontSize: 10,
     letterSpacing: 4,
-    color: '#D4AC0D',
+    color: '#c0842a',
     textTransform: 'uppercase',
     fontWeight: 700,
     background: 'rgba(212,172,13,0.1)',
@@ -180,14 +180,14 @@ const styles = {
     fontFamily: 'Playfair Display, serif',
     fontSize: 36,
     fontWeight: 900,
-    color: '#f0ece3',
+    color: '#1a1a2e',
     textAlign: 'center',
     margin: 0,
     lineHeight: 1.2,
   },
   subtitle: {
     fontSize: 14,
-    color: '#7a7a9a',
+    color: '#888',
     margin: 0,
     fontStyle: 'italic',
   },
@@ -196,13 +196,13 @@ const styles = {
     width: '100%',
     maxWidth: 360,
     padding: 16,
-    background: '#12122a',
+    background: '#f8f8f8',
     borderRadius: 4,
-    border: '1px solid #D4AC0D',
+    border: '1px solid #c0842a',
     boxShadow: '0 0 60px rgba(212,172,13,0.2), 0 20px 60px rgba(0,0,0,0.6)',
   },
   artworkInner: {
-    background: '#0e0e24',
+    background: '#fafafa',
     borderRadius: 2,
     overflow: 'hidden',
   },
@@ -215,13 +215,13 @@ const styles = {
     position: 'absolute',
     width: 12,
     height: 12,
-    border: '2px solid #D4AC0D',
+    border: '2px solid #c0842a',
   },
   statsRow: {
     display: 'flex',
     width: '100%',
-    background: '#1a1a3e',
-    border: '1px solid #2a2a4a',
+    background: '#ffffff',
+    border: '1px solid #eeeeee',
     borderRadius: 12,
     padding: '16px 0',
     gap: 0,
@@ -237,7 +237,7 @@ const styles = {
     flex: 1,
     minWidth: 140,
     padding: '14px 20px',
-    background: '#D4AC0D',
+    background: '#c0842a',
     color: '#12122a',
     border: 'none',
     borderRadius: 12,
@@ -253,7 +253,7 @@ const styles = {
     minWidth: 130,
     padding: '14px 20px',
     background: 'transparent',
-    color: '#f0ece3',
+    color: '#1a1a2e',
     border: '1px solid #3a3a6a',
     borderRadius: 12,
     fontWeight: 600,
@@ -264,8 +264,8 @@ const styles = {
   btnGallery: {
     padding: '14px 20px',
     background: 'transparent',
-    color: '#7a7a9a',
-    border: '1px solid #2a2a4a',
+    color: '#888',
+    border: '1px solid #eeeeee',
     borderRadius: 12,
     fontWeight: 600,
     fontSize: 15,

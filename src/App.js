@@ -73,18 +73,17 @@ const globalStyles = `
   }
 
   body {
-    background: #12122a;
-    color: #f0ece3;
+    background: #ffffff;
+    color: #1a1a2e;
     font-family: 'Lato', sans-serif;
     -webkit-font-smoothing: antialiased;
     overscroll-behavior: none;
   }
 
   ::-webkit-scrollbar { width: 4px; height: 4px; }
-  ::-webkit-scrollbar-track { background: #0e0e24; }
-  ::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 2px; }
+  ::-webkit-scrollbar-track { background: #f5f5f5; }
+  ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
 
-  /* Hide scrollbar for category row */
   .category-scroll::-webkit-scrollbar { display: none; }
 
   @keyframes fadeUp {
@@ -105,8 +104,24 @@ const globalStyles = `
   }
 
   @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(212,172,13,0.4); }
-    50%       { box-shadow: 0 0 0 8px rgba(212,172,13,0); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(180,120,40,0.4); }
+    50%       { box-shadow: 0 0 0 8px rgba(180,120,40,0); }
+  }
+
+  @keyframes wrongColor {
+    0%   { transform: scale(1); }
+    25%  { transform: scale(1.05); }
+    50%  { transform: scale(0.97); }
+    75%  { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-6px); }
+    40%       { transform: translateX(6px); }
+    60%       { transform: translateX(-4px); }
+    80%       { transform: translateX(4px); }
   }
 
   @keyframes spin {
@@ -115,17 +130,8 @@ const globalStyles = `
   }
 
   button { -webkit-tap-highlight-color: transparent; outline: none; }
-  
-  /* Card hover effect */
-  [data-card]:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-  }
-
-  /* Prevent text selection on canvas interaction */
   svg { -webkit-user-select: none; user-select: none; }
 
-  /* iOS safe area support */
   @supports (padding-bottom: env(safe-area-inset-bottom)) {
     .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
   }

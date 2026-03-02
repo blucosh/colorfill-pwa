@@ -13,9 +13,11 @@ export default function ColorCanvas({
   onTouchMove,
   onTouchEnd,
   onWheel,
+  onWrongColor,
 }) {
   const containerRef = useRef(null);
   const [hoveredRegion, setHoveredRegion] = useState(null);
+  const [shakenRegion, setShakenRegion] = useState(null);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -24,51 +26,36 @@ export default function ColorCanvas({
     return () => el.removeEventListener('wheel', onWheel);
   }, [onWheel]);
 
-  const getColor = useCallback((colorId) => {
-    return COLOR_PALETTE.find(c => c.id === colorId)?.hex || '#2a2a4a';
-  }, []);
+  const getColor = (colorId) => COLOR_PALETTE.find(c => c.id === colorId)?.hex || '#f0f0f0';
 
-  const handleRegionClick = useCallback((e, regionId) => {
+  const handleRegionClick = useCallback((e, region) => {
     e.stopPropagation();
-    onFillRegion(regionId, selectedColor);
-  }, [selectedColor, onFillRegion]);
-
-  const selectedHex = COLOR_PALETTE.find(c => c.id === selectedColor)?.hex;
+    if (filledRegions[region.id]) return;
+    if (selectedColor === region.colorId) {
+      onFillRegion(region.id, selectedColor);
+    } else {
+      setShakenRegion(region.id);
+      setTimeout(() => setShakenRegion(null), 600);
+      onWrongColor && onWrongColor(region.colorId);
+    }
+  }, [selectedColor, filledRegions, onFillRegion, onWrongColor]);
 
   return (
-    <div
-      ref={containerRef}
-      style={styles.canvas}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-    >
-      <div
-        style={{
-          ...styles.svgWrapper,
-          transform: `scale(${zoom}) translate(${pan.x / zoom}px, ${pan.y / zoom}px)`,
-          transformOrigin: 'center center',
-          willChange: 'transform',
-        }}
-      >
-        <svg
-          viewBox={image.viewBox}
-          style={styles.svg}
-          aria-label={`${image.title} coloring canvas`}
-        >
-          <defs>
-            <filter id="hoverGlow">
-              <feDropShadow dx="0" dy="0" stdDeviation="3" floodColor={selectedHex} floodOpacity="0.8" />
-            </filter>
-          </defs>
-
+    <div ref={containerRef} style={styles.canvas}
+      onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+      <div style={{
+        ...styles.svgWrapper,
+        transform: `scale(${zoom}) translate(${pan.x / zoom}px, ${pan.y / zoom}px)`,
+        transformOrigin: 'center center',
+        willChange: 'transform',
+      }}>
+        <svg viewBox={image.viewBox} style={styles.svg}>
           {image.regions.map((region) => {
             const filled = filledRegions[region.id];
-            const fillColor = filled ? getColor(filled) : '#1a1a3e';
+            const fillColor = filled ? getColor(filled) : '#ffffff';
+            const isShaken = shakenRegion === region.id;
             const isHovered = hoveredRegion === region.id;
-            const isFilled = !!filled;
 
-            // Compute text position from path bounding box approximation
             const nums = (region.d.match(/-?\d+\.?\d*/g) || []).map(Number);
             const xs = nums.filter((_, i) => i % 2 === 0).filter(n => n > 0 && n < 2000);
             const ys = nums.filter((_, i) => i % 2 === 1).filter(n => n > 0 && n < 2000);
@@ -76,35 +63,26 @@ export default function ColorCanvas({
             const cy = ys.length ? (Math.min(...ys) + Math.max(...ys)) / 2 : 0;
 
             return (
-              <g key={region.id}>
+              <g key={region.id} style={isShaken ? { animation: 'shake 0.5s ease' } : {}}>
                 <path
                   d={region.d}
-                  fill={fillColor}
-                  stroke={isFilled ? 'rgba(255,255,255,0.1)' : '#3a3a6a'}
-                  strokeWidth={isFilled ? '0.5' : '0.8'}
+                  fill={isShaken ? '#ffe0e0' : fillColor}
+                  stroke={filled ? 'rgba(0,0,0,0.1)' : '#bbb'}
+                  strokeWidth={filled ? '0.5' : '0.8'}
                   style={{
-                    cursor: 'pointer',
+                    cursor: filled ? 'default' : 'pointer',
                     transition: 'fill 0.2s ease',
-                    filter: isHovered ? 'url(#hoverGlow)' : 'none',
+                    filter: isHovered && !filled ? 'brightness(0.93)' : 'none',
                   }}
-                  onClick={(e) => handleRegionClick(e, region.id)}
-                  onMouseEnter={() => setHoveredRegion(region.id)}
+                  onClick={(e) => handleRegionClick(e, region)}
+                  onMouseEnter={() => !filled && setHoveredRegion(region.id)}
                   onMouseLeave={() => setHoveredRegion(null)}
                 />
-                {showNumbers && !isFilled && cx > 0 && cy > 0 && (
-                  <text
-                    x={cx}
-                    y={cy + 3.5}
-                    textAnchor="middle"
-                    style={{
-                      fontSize: '9px',
-                      fontWeight: '700',
-                      fill: '#8080c0',
-                      pointerEvents: 'none',
-                      userSelect: 'none',
-                      fontFamily: 'Lato, sans-serif',
-                    }}
-                  >
+                {showNumbers && !filled && cx > 0 && cy > 0 && (
+                  <text x={cx} y={cy + 3.5} textAnchor="middle"
+                    style={{ fontSize: '9px', fontWeight: '700',
+                      fill: isShaken ? '#e53935' : '#999',
+                      pointerEvents: 'none', userSelect: 'none', fontFamily: 'Lato, sans-serif' }}>
                     {region.label || region.colorId}
                   </text>
                 )}
@@ -119,28 +97,17 @@ export default function ColorCanvas({
 
 const styles = {
   canvas: {
-    flex: 1,
-    background: '#0e0e24',
-    overflow: 'hidden',
-    position: 'relative',
-    cursor: 'crosshair',
-    touchAction: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1, background: '#f0f0f0', overflow: 'hidden',
+    position: 'relative', cursor: 'crosshair', touchAction: 'none',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
   svgWrapper: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: '100%', height: '100%',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
   svg: {
-    maxWidth: '90vw',
-    maxHeight: '60vh',
-    width: '100%',
-    height: '100%',
-    filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.8))',
+    maxWidth: '90vw', maxHeight: '60vh', width: '100%', height: '100%',
+    filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.15))',
+    background: '#ffffff', borderRadius: 4,
   },
 };
